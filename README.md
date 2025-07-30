@@ -7,7 +7,6 @@ A Chrome extension that allows you to easily clear recent subreddits from Reddit
 - **View Recent Subreddits**: See all your recently visited subreddits with their icons and names
 - **Selective Clearing**: Choose specific subreddits to remove from your recent list
 - **Select All Option**: Quickly select or deselect all subreddits
-- **Modern UI**: Clean, responsive interface that matches Reddit's design
 - **Real-time Updates**: See changes immediately after clearing subreddits
 
 ## Installation
@@ -19,16 +18,6 @@ A Chrome extension that allows you to easily clear recent subreddits from Reddit
 3. Enable "Developer mode" in the top right corner
 4. Click "Load unpacked" and select the folder containing this extension
 5. The extension should now appear in your extensions list
-
-### Method 2: Create Icons (Optional)
-
-The extension will work without custom icons, but you can add them for a better experience:
-
-1. Create icon files named:
-   - `icon16.png` (16x16 pixels)
-   - `icon48.png` (48x48 pixels)
-   - `icon128.png` (128x128 pixels)
-2. Place them in the extension directory
 
 ## Usage
 
@@ -139,7 +128,7 @@ Feel free to submit issues, feature requests, or pull requests to improve the ex
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the Unlicense License - see the LICENSE file for details.
 
 ## Support
 
