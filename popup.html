@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit Clear Recents</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Clear Recent Subreddits</h1>
+            <p class="subtitle">Select subreddits to remove from your recent list</p>
+        </header>
+        
+        <div class="controls">
+            <div class="select-all-container">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="selectAll">
+                    <span class="checkmark"></span>
+                    <span class="label-text">Select All</span>
+                </label>
+            </div>
+            <button id="clearSelected" class="clear-btn" disabled>Clear Selected</button>
+        </div>
+        
+        <div class="subreddits-container">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading recent subreddits...</p>
+            </div>
+            <div id="subredditsList" class="subreddits-list" style="display: none;">
+                <!-- Subreddits will be populated here -->
+            </div>
+            <div id="noSubreddits" class="no-subreddits" style="display: none;">
+                <p>No recent subreddits found</p>
+            </div>
+        </div>
+        
+        <div class="status" id="status"></div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html> 

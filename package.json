@@ -1,0 +1,30 @@
+{
+  "name": "reddit-clear-recents-chrome-ext",
+  "version": "1.0.0",
+  "description": "A Chrome extension to clear recent subreddits from Reddit's localStorage",
+  "main": "background.js",
+  "scripts": {
+    "build": "echo 'No build process needed for this extension'",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "reddit",
+    "localstorage",
+    "privacy",
+    "browser-extension"
+  ],
+  "author": "Anees",
+  "license": "Unlicense",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anees264/reddit-clear-recents-chrome-ext.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anees264/reddit-clear-recents-chrome-ext/issues"
+  },
+  "homepage": "https://github.com/anees264/reddit-clear-recents-chrome-ext#readme",
+  "devDependencies": {},
+  "dependencies": {}
+} 

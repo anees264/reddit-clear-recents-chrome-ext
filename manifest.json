@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Reddit Clear Recents",
+  "version": "1.0.0",
+  "description": "Clear recent subreddits from Reddit's localStorage",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://www.reddit.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Clear Reddit Recents"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.reddit.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+} 
