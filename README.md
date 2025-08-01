@@ -9,9 +9,8 @@ A Chrome extension that allows you to easily clear recent subreddits from Reddit
 - **Select All Option**: Quickly select or deselect all subreddits
 - **Real-time Updates**: See changes immediately after clearing subreddits
 
-## Installation
 
-### Method 1: Load as Unpacked Extension (Development)
+## Load as Unpacked Extension - Development
 
 1. Clone or download this repository
 2. Open Chrome and navigate to `chrome://extensions/`
@@ -72,7 +71,6 @@ reddit-clear-recents-chrome-ext/
 
 The extension requires the following permissions:
 
-- **storage**: To access Chrome's storage API
 - **activeTab**: To interact with the current Reddit tab
 - **scripting**: To execute scripts in Reddit pages
 - **tabs**: To reload the page after clearing subreddits

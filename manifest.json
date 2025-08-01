@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "description": "Clear recent subreddits from Reddit's localStorage",
   "permissions": [
-    "storage",
     "activeTab",
     "scripting",
     "tabs"
