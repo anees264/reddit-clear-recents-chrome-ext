@@ -208,6 +208,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (result && result.result) {
                     showSuccess(`Successfully cleared ${selectedSubreddits.size} subreddit(s). Reloading page and extension...`);
                     
+                    // Update badge count after clearing
+                    chrome.runtime.sendMessage({ action: 'updateBadge' });
+                    
                     // Reload both the Reddit page and the extension popup after a short delay
                     setTimeout(() => {
                         chrome.tabs.reload(activeTab.id);

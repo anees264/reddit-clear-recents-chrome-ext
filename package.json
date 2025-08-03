@@ -1,6 +1,6 @@
 {
   "name": "reddit-clear-recents-chrome-ext",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Chrome extension to clear recent subreddits from Reddit's localStorage",
   "main": "background.js",
   "scripts": {
