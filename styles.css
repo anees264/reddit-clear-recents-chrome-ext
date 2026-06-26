@@ -234,6 +234,25 @@ header h1 {
     display: block;
 }
 
+.footer {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.restore-btn {
+    background: none;
+    border: none;
+    color: #7c7c7c;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px;
+}
+
+.restore-btn:hover {
+    color: #1a1a1b;
+}
+
 /* Scrollbar styling */
 .subreddits-container::-webkit-scrollbar {
     width: 6px;

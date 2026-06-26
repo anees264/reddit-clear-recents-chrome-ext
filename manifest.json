@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Reddit Clear Recents",
-  "version": "1.0.1",
-  "description": "Clear recent subreddits from Reddit's localStorage",
+  "version": "1.1.0",
+  "description": "Clear recent subreddits from Reddit's sidebar",
   "permissions": [
     "activeTab",
     "scripting",
+    "storage",
     "tabs"
   ],
   "host_permissions": [

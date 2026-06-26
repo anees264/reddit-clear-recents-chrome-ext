@@ -1,86 +1,89 @@
 // Content script for Reddit Clear Recents extension
-// This script runs in the context of Reddit pages
 
 (function() {
     'use strict';
-    
-    // Listen for messages from the popup
+
+    let removedUrls = [];
+    let debounceTimer;
+
+    function applyRemovals() {
+        if (!removedUrls.length) return;
+        const container = document.querySelector('#RECENT');
+        if (!container) return;
+        container.querySelectorAll('li[rpl]').forEach(li => {
+            const a = li.querySelector('a[href]');
+            if (a && removedUrls.includes(a.getAttribute('href'))) {
+                li.remove();
+            }
+        });
+    }
+
+    // Load stored removals and apply immediately, then watch for re-renders
+    chrome.storage.local.get(['removedSubreddits'], (data) => {
+        removedUrls = data.removedSubreddits || [];
+        applyRemovals();
+    });
+
+    // Keep in sync if popup updates storage while the page is open
+    chrome.storage.onChanged.addListener((changes) => {
+        if (changes.removedSubreddits) {
+            removedUrls = changes.removedSubreddits.newValue || [];
+            applyRemovals();
+        }
+    });
+
+    // Re-apply after Reddit re-renders the sidebar (SPA navigation, etc.)
+    const observer = new MutationObserver(() => {
+        if (!removedUrls.length) return;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(applyRemovals, 100);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.action === 'getRecentSubreddits') {
             try {
-                const recentSubredditsData = localStorage.getItem('recent-subreddits-store');
-                if (recentSubredditsData) {
-                    const subreddits = JSON.parse(recentSubredditsData);
-                    sendResponse({ success: true, data: subreddits });
-                } else {
+                const container = document.querySelector('#RECENT');
+                if (!container) {
                     sendResponse({ success: true, data: [] });
+                    return true;
                 }
+                const items = container.querySelectorAll('li[rpl]');
+                const subreddits = Array.from(items).map(li => {
+                    const a = li.querySelector('a[href]');
+                    const img = li.querySelector('img');
+                    const nameEl = li.querySelector('.truncate');
+                    return {
+                        displayNamePrefixed: nameEl ? nameEl.textContent.trim() : '',
+                        url: a ? a.getAttribute('href') : '',
+                        communityIcon: img ? img.src : ''
+                    };
+                }).filter(sr => sr.url);
+                sendResponse({ success: true, data: subreddits });
             } catch (error) {
-                console.error('Error reading recent subreddits:', error);
                 sendResponse({ success: false, error: error.message });
             }
         } else if (request.action === 'removeSubreddits') {
             try {
-                const recentSubredditsData = localStorage.getItem('recent-subreddits-store');
-                if (!recentSubredditsData) {
-                    sendResponse({ success: false, error: 'No recent subreddits found' });
-                    return;
+                const container = document.querySelector('#RECENT');
+                if (!container) {
+                    sendResponse({ success: false, error: 'Recent section not found' });
+                    return true;
                 }
-                
-                let currentSubreddits = JSON.parse(recentSubredditsData);
-                const uuidsToRemove = request.subreddits.map(sr => sr.uuid);
-                
-                // Filter out the subreddits to remove
-                currentSubreddits = currentSubreddits.filter(sr => !uuidsToRemove.includes(sr.uuid));
-                
-                // Save back to localStorage
-                localStorage.setItem('recent-subreddits-store', JSON.stringify(currentSubreddits));
-                
-                sendResponse({ success: true, removedCount: uuidsToRemove.length });
+                const urlsToRemove = request.urls;
+                let removed = 0;
+                container.querySelectorAll('li[rpl]').forEach(li => {
+                    const a = li.querySelector('a[href]');
+                    if (a && urlsToRemove.includes(a.getAttribute('href'))) {
+                        li.remove();
+                        removed++;
+                    }
+                });
+                sendResponse({ success: true, removedCount: removed });
             } catch (error) {
-                console.error('Error removing subreddits:', error);
                 sendResponse({ success: false, error: error.message });
             }
         }
-        
-        // Return true to indicate we will send a response asynchronously
         return true;
     });
-    
-    // Function to get recent subreddits (can be called from popup)
-    window.getRecentSubreddits = function() {
-        try {
-            const recentSubredditsData = localStorage.getItem('recent-subreddits-store');
-            if (recentSubredditsData) {
-                return JSON.parse(recentSubredditsData);
-            }
-            return null;
-        } catch (error) {
-            console.error('Error reading recent subreddits:', error);
-            return null;
-        }
-    };
-    
-    // Function to remove subreddits (can be called from popup)
-    window.removeSubreddits = function(subredditsToRemove) {
-        try {
-            const recentSubredditsData = localStorage.getItem('recent-subreddits-store');
-            if (!recentSubredditsData) return false;
-            
-            let currentSubreddits = JSON.parse(recentSubredditsData);
-            
-            // Remove subreddits by uuid
-            const uuidsToRemove = subredditsToRemove.map(sr => sr.uuid);
-            currentSubreddits = currentSubreddits.filter(sr => !uuidsToRemove.includes(sr.uuid));
-            
-            localStorage.setItem('recent-subreddits-store', JSON.stringify(currentSubreddits));
-            return true;
-        } catch (error) {
-            console.error('Error removing subreddits:', error);
-            return false;
-        }
-    };
-    
-    // Log that content script is loaded
-    console.log('Reddit Clear Recents: Content script loaded');
-})(); 
+})();
