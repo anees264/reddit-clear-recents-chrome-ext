@@ -6,8 +6,7 @@
   "permissions": [
     "activeTab",
     "scripting",
-    "storage",
-    "tabs"
+    "storage"
   ],
   "host_permissions": [
     "https://www.reddit.com/*"

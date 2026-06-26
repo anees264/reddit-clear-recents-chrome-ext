@@ -19,7 +19,6 @@ The extension reads the recent communities section directly from Reddit's sideba
 - **activeTab**: To interact with the current Reddit tab
 - **scripting**: To execute scripts on Reddit pages
 - **storage**: To persist the list of removed subreddits locally across page reloads
-- **tabs**: To query the active tab
 - **Host permissions**: `https://www.reddit.com/*`
 
 ## Usage
