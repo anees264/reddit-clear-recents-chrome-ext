@@ -1,133 +1,67 @@
 # Reddit Clear Recents Chrome Extension
 
-A Chrome extension that allows you to easily clear recent subreddits from Reddit's localStorage. This extension provides a clean interface to view and selectively remove subreddits from your recent browsing history.
+A Chrome extension to selectively remove subreddits from Reddit's recent communities sidebar. Removals persist across page reloads.
 
 ## Features
 
-- **View Recent Subreddits**: See all your recently visited subreddits with their icons and names
-- **Selective Clearing**: Choose specific subreddits to remove from your recent list
-- **Select All Option**: Quickly select or deselect all subreddits
-- **Real-time Updates**: See changes immediately after clearing subreddits
-
-
-## Load as Unpacked Extension - Development
-
-1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
-3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" and select the folder containing this extension
-5. The extension should now appear in your extensions list
-
-## Usage
-
-1. **Navigate to Reddit**: Go to any Reddit page (https://www.reddit.com)
-2. **Open Extension**: Click the extension icon in your Chrome toolbar
-3. **View Subreddits**: The popup will show all your recent subreddits
-4. **Select Items**: Use checkboxes to select subreddits you want to remove
-   - Use "Select All" to select/deselect all items
-   - Individual checkboxes for specific subreddits
-5. **Clear Selected**: Click "Clear Selected" to remove the chosen subreddits
-6. **Page & Extension Reload**: Both the page and extension popup will automatically reload after clearing to reflect the changes
-7. **Confirmation**: You'll see a success message confirming the action
+- **View Recent Subreddits**: See all recently visited subreddits with their icons and names
+- **Selective Clearing**: Choose specific subreddits to remove
+- **Select All**: Quickly select or deselect all items at once
+- **Persistent Removals**: Removed subreddits stay hidden across page reloads and SPA navigation
+- **Restore All**: Reset the removed list to bring everything back
 
 ## How It Works
 
-The extension accesses Reddit's localStorage where recent subreddits are stored under the key `recent-subreddits-store`. It reads this data, displays it in a user-friendly interface, and allows you to selectively remove entries by their UUID.
-
-### Data Structure
-
-The extension works with Reddit's recent subreddits data structure:
-
-```json
-[
-  {
-    "communityIcon": "https://...",
-    "displayNamePrefixed": "r/SubredditName",
-    "headerImage": "https://...",
-    "iconImage": "https://...",
-    "keyColor": "#HEXCODE",
-    "name": "t5_...",
-    "url": "/r/SubredditName/",
-    "uuid": "SubredditName"
-  }
-]
-```
-
-## Files Structure
-
-```
-reddit-clear-recents-chrome-ext/
-├── manifest.json          # Extension configuration
-├── popup.html            # Extension popup interface
-├── popup.js              # Popup functionality
-├── content.js            # Content script for Reddit pages
-├── background.js         # Background service worker
-├── styles.css            # Popup styling
-├── README.md             # This file
-└── LICENSE               # License file
-```
+The extension reads the recent communities section directly from Reddit's sidebar DOM (`#RECENT`). When you remove items, they are hidden immediately and the list is saved locally — on every subsequent page load, the extension automatically removes them again before they become visible.
 
 ## Permissions
 
-The extension requires the following permissions:
-
 - **activeTab**: To interact with the current Reddit tab
-- **scripting**: To execute scripts in Reddit pages
-- **tabs**: To reload the page after clearing subreddits
-- **Host permissions**: Access to `https://www.reddit.com/*`
+- **scripting**: To execute scripts on Reddit pages
+- **storage**: To persist the list of removed subreddits locally across page reloads
+- **tabs**: To query the active tab
+- **Host permissions**: `https://www.reddit.com/*`
 
-## Development
+## Usage
 
-### Making Changes
+1. Navigate to any Reddit page
+2. Click the extension icon in your Chrome toolbar
+3. Select the subreddits you want to remove
+4. Click **Clear Selected**
+5. To undo all removals, click **Restore all removed** at the bottom of the popup, then reload Reddit
 
-1. Edit the relevant files
-2. Go to `chrome://extensions/`
-3. Click the refresh icon on the extension card
-4. Test your changes
+## Load as Unpacked Extension (Development)
 
-### Debugging
+1. Clone or download this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable **Developer mode** in the top right corner
+4. Click **Load unpacked** and select the extension folder
 
-- Open the extension popup and right-click to inspect
-- Check the browser console for any errors
-- Use Chrome DevTools to debug content scripts
+## Files
+
+```
+reddit-clear-recents-chrome-ext/
+├── manifest.json       # Extension configuration
+├── popup.html          # Popup interface
+├── popup.js            # Popup logic
+├── content.js          # Content script — applies removals on page load
+├── background.js       # Background service worker
+├── styles.css          # Popup styles
+└── icons/              # Extension icons
+```
 
 ## Troubleshooting
 
-### Extension Not Working
-
-1. **Check Reddit URL**: Make sure you're on a Reddit page (reddit.com)
-2. **Extension Location**: The extension only works when opened while on Reddit.com
-3. **Refresh Page**: Try refreshing the Reddit page
-4. **Check Console**: Open browser console for error messages
-5. **Reinstall Extension**: Try removing and re-adding the extension
-
-### No Subreddits Found
-
-- This usually means you haven't visited any subreddits recently
-- Try visiting a few subreddits and then use the extension
-- Check if you're logged into Reddit
-
-### Clear Button Disabled
-
-- Make sure you've selected at least one subreddit
-- The button is only enabled when items are selected
+- **No subreddits shown**: Make sure you're on reddit.com and have visited some subreddits recently
+- **Items reappearing**: If Reddit re-adds a subreddit (because you visited it), the extension will suppress it again on next render
+- **Want items back**: Use the **Restore all removed** button in the popup, then reload the Reddit tab
 
 ## Privacy
 
-This extension:
-- Only accesses Reddit's localStorage data
-- Does not send any data to external servers
-- Only works on Reddit.com pages
-- Requires no personal information
-
-## Contributing
-
-Feel free to submit issues, feature requests, or pull requests to improve the extension.
+- All data is stored locally in your browser via `chrome.storage.local`
+- No data is sent to any external server
+- Only runs on reddit.com pages
 
 ## License
 
-This project is licensed under the Unlicense License - see the LICENSE file for details.
-
-## Support
-
-If you encounter any issues or have questions, please open an issue on the repository. 
+Unlicense — see LICENSE for details.
